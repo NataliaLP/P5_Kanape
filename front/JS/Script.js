@@ -3,8 +3,8 @@ fetch("http://localhost:3000/api/products")
   .then((response) => {
     return response.json();
     })
-    .then((sofas) => {
-        for (data of sofas) {
+    .then((products) => {
+        for (data of products) {
             document.getElementById("items").innerHTML += `
             <a href="./product.html?id=${data._id}">
                 <article>
