@@ -39,10 +39,6 @@ let displaySofa = (sofa) => {
 
 
 //------Tableau qui contiendra les articles que l'utilisateur souhaite mettre dans le panier---
-const cartArray = {
-    'sofa' : []
-}
-
 
 const btnAddCard = document.getElementById("addToCart")
 
@@ -74,21 +70,29 @@ const btnAddCard = document.getElementById("addToCart")
         color: colorSelect,
       };
       console.log(sofaSelectToCart)
-      let pastCart = localStorage.getItem("cart");
-      let cart;
-      if (pastCart === null) {
-          cart = []
-      } else {
-          panier = JSON.parse(pastCart);
-      }
-      cart.push(sofaSelectToCart);
-      localStorage.setItem("cart", JSON.stringify(cart));
+      let cart = JSON.parse(localStorage.getItem("sofa"));
+      const localStorageAdd = () => {
+        cart.push(sofaSelectToCart);
+        localStorage.sofa = JSON.stringify(cart)
+      };
+      if (cart === null) {
+        cart = []
+        localStorageAdd()
+        }
+        else {
+        sameSofaAddQuantity = () => {
+          for (i = 0; i < cart.length; i++) {
+              if ( cart[i].id === sofaSelectToCart.id && cart[i].color === sofaSelectToCart.color) {
+                  cart[i].quantity = parseInt(cart[i].quantity, 10) + parseInt(sofaSelectToCart.quantity, 10);
+                  localStorage.sofa = JSON.stringify(cart)
+              }
+              else {
+                localStorageAdd()
+              
+              }
+            }
+         
+          }
+      };
     }
-    console.log(localStorage)
     })
-
-
-  
-
-
-
