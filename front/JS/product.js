@@ -45,23 +45,23 @@ const cartArray = {
 
 
 const btnAddCard = document.getElementById("addToCart")
-let colorSelect = document.getElementById("colors").value;
-let quantitySelect = document.getElementById("quantity").value;
 
-
-let sofaSelect = (sofa) => {
     btnAddCard.addEventListener("click", (event) => {
-    if (document.getElementById("colors").value == undefined) {
+    let colorSelect = document.getElementById("colors").value;
+    let quantitySelect = document.getElementById("quantity").value;
+
+
+    if (colorSelect.length === 0) {
         confirm("Veuillez sélectionner une couleur ");
     } 
     
     
-    else if (document.getElementById("quantity").value == 0) {
+    else if (quantitySelect == 0) {
         confirm("Veuillez sélectionner le nombre d'article souhaité");  
     } 
     
     
-    else if (document.getElementById("quantity").value > 100) {
+    else if (quantitySelect > 100) {
         confirm("Les commandes sont limitées à 100 articles par références"); 
     } 
     
@@ -69,21 +69,24 @@ let sofaSelect = (sofa) => {
     else {
       alert("Cet article a été ajouté à votre panier."); 
       let sofaSelectToCart = {
-        id: getSofaId,
-        title: sofa.name,
+        id: getSofaId(),
         quantity: quantitySelect,
         color: colorSelect,
-        img: sofa.imageUrl,
-        alt: sofa.altTxt,
-        description: sofa.description,
-        price: sofa.price * quantitySelect,
       };
-
-
+      console.log(sofaSelectToCart)
+      let pastCart = localStorage.getItem("cart");
+      let cart;
+      if (pastCart === null) {
+          cart = []
+      } else {
+          panier = JSON.parse(pastCart);
+      }
+      cart.push(sofaSelectToCart);
+      localStorage.setItem("cart", JSON.stringify(cart));
     }
-    })}
+    console.log(localStorage)
+    })
 
-    console.log(sofaSelect)
 
   
 
