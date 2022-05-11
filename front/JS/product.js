@@ -69,30 +69,32 @@ const btnAddCard = document.getElementById("addToCart")
         quantity: quantitySelect,
         color: colorSelect,
       };
-      console.log(sofaSelectToCart)
-      let cart = JSON.parse(localStorage.getItem("sofa"));
+      let existingCart = JSON.parse(localStorage.getItem("sofa"));
       const localStorageAdd = () => {
-        cart.push(sofaSelectToCart);
-        localStorage.sofa = JSON.stringify(cart)
+        existingCart.push(sofaSelectToCart);
+        localStorage.setItem("sofa" , JSON.stringify(existingCart));
       };
-      if (cart === null) {
-        cart = []
+      if (existingCart === null) {
+        existingCart = []
         localStorageAdd()
         }
         else {
         sameSofaAddQuantity = () => {
-          for (i = 0; i < cart.length; i++) {
-              if ( cart[i].id === sofaSelectToCart.id && cart[i].color === sofaSelectToCart.color) {
-                  cart[i].quantity = parseInt(cart[i].quantity, 10) + parseInt(sofaSelectToCart.quantity, 10);
-                  localStorage.sofa = JSON.stringify(cart)
+          for (i = 0; i < existingCart.length; i++) {
+              if ( existingCart[i].id === sofaSelectToCart.id && existingCart[i].color === sofaSelectToCart.color) {
+                existingCart[i].quantity = parseInt(existingCart[i].quantity, 10) + parseInt(sofaSelectToCart.quantity, 10);
+                localStorage.setItem("sofa" , JSON.stringify(existingCart));
               }
               else {
                 localStorageAdd()
-              
+                
+
               }
             }
          
           }
       };
+      console.log(localStorage);
+
     }
     })
