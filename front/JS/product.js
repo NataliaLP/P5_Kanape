@@ -90,6 +90,7 @@ const btnAddCard = document.getElementById("addToCart")
             }
             if (sofaFoundInCart === false) {
                 localStorageAdd();
+                console.log(localStorage)
 
               }
           }
@@ -97,5 +98,4 @@ const btnAddCard = document.getElementById("addToCart")
       }
     }
     )
-    console.log(localStorage) 
 
