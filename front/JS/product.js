@@ -78,23 +78,24 @@ const btnAddCard = document.getElementById("addToCart")
         existingCart = []
         localStorageAdd()
         }
-        else {
-        sameSofaAddQuantity = () => {
-          for (i = 0; i < existingCart.length; i++) {
+     else {
+            let sofaFoundInCart = false;
+            for (i = 0; i < existingCart.length; i++) {
               if ( existingCart[i].id === sofaSelectToCart.id && existingCart[i].color === sofaSelectToCart.color) {
+                sofaFoundInCart = true;
                 existingCart[i].quantity = parseInt(existingCart[i].quantity, 10) + parseInt(sofaSelectToCart.quantity, 10);
                 localStorage.setItem("sofa" , JSON.stringify(existingCart));
-              }
-              else {
-                localStorageAdd()
-                
-
+                break;
               }
             }
-         
-          }
-      };
-      console.log(localStorage);
+            if (sofaFoundInCart === false) {
+                localStorageAdd();
 
+              }
+          }
+
+      }
     }
-    })
+    )
+    console.log(localStorage) 
+
