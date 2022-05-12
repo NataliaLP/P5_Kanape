@@ -68,6 +68,11 @@ const btnAddCard = document.getElementById("addToCart")
         id: getSofaId(),
         quantity: quantitySelect,
         color: colorSelect,
+        name: sofa.name,
+        photo: sofa.imageUrl,
+        altTxt: sofa.altTxt,
+        description: sofa.description,
+        price: sofa.price,
       };
       let existingCart = JSON.parse(localStorage.getItem("sofa"));
       const localStorageAdd = () => {
@@ -90,9 +95,9 @@ const btnAddCard = document.getElementById("addToCart")
             }
             if (sofaFoundInCart === false) {
                 localStorageAdd();
-                console.log(localStorage)
-
               }
+              console.log(localStorage)
+
           }
 
       }
