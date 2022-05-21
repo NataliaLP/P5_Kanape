@@ -68,12 +68,13 @@ const btnAddCard = document.getElementById("addToCart")
         id: getSofaId(),
         quantity: quantitySelect,
         color: colorSelect,
-        name: sofa.name,
-        photo: sofa.imageUrl,
-        altTxt: sofa.altTxt,
-        description: sofa.description,
-        price: sofa.price,
+        name: document.getElementById("title").textContent,
+        photo: document.querySelector(".item__img img").src,
+        altTxt: document.querySelector(".item__img img").alt,
+        description:  document.getElementById("description").textContent,
+        price: document.getElementById("price").textContent,
       };
+      console.log(sofaSelectToCart)
       let existingCart = JSON.parse(localStorage.getItem("sofa"));
       const localStorageAdd = () => {
         existingCart.push(sofaSelectToCart);
