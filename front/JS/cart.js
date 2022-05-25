@@ -1,16 +1,15 @@
 let totalQuantity = 0;
 let totalPrice = 0;
+let cart = JSON.parse(localStorage.getItem("sofa")); 
 
 
-function eventDeleteSofa() {
-  document.querySelector("#cart_items").innerHTML = "";
-  showCart();
-}
+
 
 showCart()
 
 function showCart () {
-  let cart = JSON.parse(localStorage.getItem("sofa")); 
+  cart 
+  console.log(cart)
   totalQuantity = 0;
   totalPrice = 0;
 
@@ -21,38 +20,40 @@ function showCart () {
 
 } else {
   for (sofaCart of cart) {
-    fetch(`http://localhost:3000/api/products/${sofaCart.Id}`)
+    fetch(`http://localhost:3000/api/products/${sofaCart.id}`)
     .then((response) => {
         return response.json();
     })
     .then((sofa) => {
-        showSofaInCart(sofaCart, sofaCart.quantity, sofaCart.color);
+        showSofaInCart(sofa, sofaCart.quantity, sofaCart.color);
     })
     .catch((error) => {
         alert(error);
     });
+
 
   }
 }
 }
 
 
-function showSofaInCart(sofaCart, quantity, color) {
-      document.querySelector("#cart__items").innerHTML += 
-      `<article class="cart__item" data-id="${sofaCart.id}" data-color="${color}">
+function showSofaInCart(sofa, quantity, color) {
+
+      document.querySelector("#cart__items").innerHTML +=  
+      `<article class="cart__item" data-id="${sofa.id}" data-color="${color}">
       <div class="cart__item__img">
-      <img src="${sofaCart.imageUrl}" alt="${sofaCart.altTxt}">
+      <img src="${sofa.imageUrl}" alt="${sofa.altTxt}">
       </div>
       <div class="cart__item__content">
         <div class="cart__item__content__description">
-          <h2>${sofaCart.name}</h2>
-          <p>${color}</p>
-          <p>${sofaCart.price}€</p>
+          <h2>${sofa.name}</h2>
+          <p>${sofaCart.color}</p>
+          <p>${sofa.price}€</p>
         </div>
         <div class="cart__item__content__settings">
           <div class="cart__item__content__settings__quantity">
             <p>Qté :</p>
-            <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${quantity}">
+            <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${sofaCart.quantity}">
           </div>
           <div class="cart__item__content__settings__delete">
             <p class="deleteItem">Supprimer</p>
@@ -61,8 +62,10 @@ function showSofaInCart(sofaCart, quantity, color) {
       </div>
     </article>`;
 totalQuantity += Number(quantity);
-totalPrice += sofaCart.price * quantity;
+totalPrice += sofa.price * quantity;
 
 document.querySelector("#totalQuantity").innerHTML = totalQuantity;
 document.querySelector("#totalPrice").innerHTML = totalPrice;
   }
+  
+console.log(showSofaInCart)
