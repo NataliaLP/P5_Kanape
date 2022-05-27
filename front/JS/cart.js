@@ -1,7 +1,7 @@
 let totalQuantity = 0;
 let totalPrice = 0;
 let cart = JSON.parse(localStorage.getItem("sofa")); 
-
+let deleteSofa = document.querySelectorAll(".deleteItem");
 
 
 
@@ -19,7 +19,7 @@ function showCart () {
     document.querySelector("#totalPrice").innerHTML = "0";
 
 } else {
-  for (sofaCart of cart) {
+  for (let sofaCart of cart) {
     fetch(`http://localhost:3000/api/products/${sofaCart.id}`)
     .then((response) => {
         return response.json();
@@ -47,13 +47,13 @@ function showSofaInCart(sofa, quantity, color) {
       <div class="cart__item__content">
         <div class="cart__item__content__description">
           <h2>${sofa.name}</h2>
-          <p>${sofaCart.color}</p>
+          <p>${color}</p>
           <p>${sofa.price}€</p>
         </div>
         <div class="cart__item__content__settings">
           <div class="cart__item__content__settings__quantity">
             <p>Qté :</p>
-            <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${sofaCart.quantity}">
+            <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${quantity}">
           </div>
           <div class="cart__item__content__settings__delete">
             <p class="deleteItem">Supprimer</p>
@@ -69,3 +69,12 @@ document.querySelector("#totalPrice").innerHTML = totalPrice;
   }
   
 console.log(showSofaInCart)
+
+function deleteSofaOfCart() {
+  deleteSofa.addEventListener("click", () => {
+    localStorage.removeItem(sofa);
+  })
+
+  document.querySelector("#cart_items").innerHTML = "";
+  showCart();
+}
