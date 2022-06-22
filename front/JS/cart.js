@@ -1,16 +1,14 @@
 let totalQuantity = 0;
 let totalPrice = 0;
 
-
 showCart()
 
-function showCart() {
+async function showCart() {
 	let cart = JSON.parse(localStorage.getItem("sofa"));
-	console.log(cart)
+	console.log(cart);
 	totalQuantity = 0;
 	totalPrice = 0;
 
-	document.querySelector("#cart__items").innerHTML = "";
 
 	if (cart === null || cart.length === 0) {
 		document.querySelector("h1").innerText += " est vide !";
@@ -18,20 +16,19 @@ function showCart() {
 		document.querySelector("#totalPrice").innerHTML = "0";
 	}
 	else {
+		const articlesArray = [];
+
 		for (let sofaCart of cart) {
-			fetch(`http://localhost:3000/api/products/${sofaCart.id}`)
-			.then((response) => {
-				return response.json();
-			})
-			.then((sofa) => {
-				showSofaInCart(sofa, sofaCart.quantity, sofaCart.color);
-			})
-			.catch((error) => {
-				alert(error);
-			});
-
-
+			const response = await fetch(`http://localhost:3000/api/products/${sofaCart.id}`);
+			const sofa = await response.json();
+			const article = showSofaInCart(sofa, sofaCart.quantity, sofaCart.color);
+			articlesArray.push(article);
 		}
+
+		document.querySelector("#cart__items").innerHTML = "";
+		articlesArray.forEach(article=>{
+			document.querySelector("#cart__items").append(article);
+		});
 	}
 }
 
@@ -54,7 +51,7 @@ function showSofaInCart(sofa, quantity, color) {
 		<div class="cart__item__content__settings">
 		  <div class="cart__item__content__settings__quantity">
 		    <p>Qté :</p>
-		    <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${quantity}">
+		    <input type="number" class="itemQuantity" name="itemQuantity" min="0" max="100" value="${quantity}">
 		  </div>
 		  <div class="cart__item__content__settings__delete">
 		    <p class="deleteItem">Supprimer</p>
@@ -62,7 +59,6 @@ function showSofaInCart(sofa, quantity, color) {
 		</div>
 		</div>
 	`;
-	document.querySelector("#cart__items").append(article);
 
 	let deleteSofaButton = article.querySelector(".deleteItem");
 	deleteSofaButton.addEventListener("click", () => {
@@ -72,18 +68,22 @@ function showSofaInCart(sofa, quantity, color) {
 
   let inputQuantity = article.querySelector(".itemQuantity");
   inputQuantity.addEventListener("change", () => {
-    changeQuantity(sof._id, color);
+	  const newQuantity = inputQuantity.valueAsNumber;
+	  if (newQuantity === 0) {
+		  deleteSofaOfCart(sofa._id, color);
+	  } else {
+		  changeQuantity(sofa._id, color, inputQuantity.valueAsNumber);
+	  }
   } );
   
-	//TODO : Récupérer input number
-	//Déclarer évènement sur "change"
-	//On appelle fonction sofa._id, color, nouvelle quantité (value de l'input)
-
+	
 	totalQuantity += Number(quantity);
 	totalPrice += sofa.price * quantity;
 
 	document.querySelector("#totalQuantity").innerHTML = totalQuantity;
 	document.querySelector("#totalPrice").innerHTML = totalPrice;
+
+	return article;
 }
 
 function deleteSofaOfCart(sofaId, color) {
@@ -98,28 +98,14 @@ function deleteSofaOfCart(sofaId, color) {
 	showCart();
 }
 
-function changeQuantity(sofaId, color) {
+function changeQuantity(sofaId, color, newQuantity) {
   let cart = JSON.parse(localStorage.getItem("sofa"));
   cart = cart.map(function (sofaInCart) {
     if (sofaInCart.id === sofaId && sofaInCart.color === color) {
-    quantity = inputQuantity.value;
-  }
-    else  {
-      return sofaInCart;
+		sofaInCart.quantity = newQuantity;
     }
+	return sofaInCart;
   })
   localStorage.setItem("sofa", JSON.stringify(cart));
 	showCart();
 }
-
-
-//TODO : Fonction maj quantité
-/*
-	//On récupère tableau du panier (cart)
-	//On utilise la méthode map() de Array
-	//Dans la fonction du map, deux cas :
-	// - Soit on est sur l'objet qui correspond au combo id/couleur : on maj la quantité de sofaInCart et on retourne sofaInCart
-	// - Soit on est sur un autre canapé/couleur : return sofaInCart
-	//On enregistre cart dans localStorage
-	//showCart()
- */
