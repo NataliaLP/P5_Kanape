@@ -109,3 +109,37 @@ function changeQuantity(sofaId, color, newQuantity) {
   localStorage.setItem("sofa", JSON.stringify(cart));
 	showCart();
 }
+
+
+
+const btnCommander = document.querySelector("#order");
+
+btnCommander.addEventListener('click',(event) =>{
+    event.preventDefault();
+let contact = {
+LastName = document.getElementById("lastName").value,
+FirstName = document.getElementById("firstName").value,
+Email = document.getElementById("email").value,
+Address = document.getElementById("address").value,
+City = document.getElementById("city").value,
+};
+
+
+console.log(contact);
+
+const regExpFirstLastNameCity = (value) =>{
+    return /^[A-Z][A-Za-z\é\è\ê\-]+$/.test(value);
+};
+
+function controlPrenom(){
+    const firstName = contact.firstName;
+    let inputFirstname = document.querySelector("#firstName");
+    if(regExpFirstLastNameCity(firstName)){
+		inputFirstname.style.border = "2px solid green";        
+		return true;
+    } else {
+		inputFirstname.style.border = "2px solid red";        
+        document.querySelector("#firstNameErrorMsg").textContent = "'Prénom invalide, qual est votre prénom? ";
+        return false; 
+    };
+}
