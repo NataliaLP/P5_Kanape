@@ -128,18 +128,122 @@ City = document.getElementById("city").value,
 console.log(contact);
 
 const regExpFirstLastNameCity = (value) =>{
-    return /^[A-Z][A-Za-z\é\è\ê\-]+$/.test(value);
+    return /^[A-Za-zÀ-ÖØ-öø-ÿ ]+$/.test(value);
 };
 
-function controlPrenom(){
-    const firstName = contact.firstName;
+const regExpMail = (value) => {
+    return /^[\w.]+@([\w-]+.)+[\w-]{2,4}$/.test(value);
+};
+
+const regExpAddress = (value) => {
+    return /^[0-9A-Za-zÀ-ÖØ-öø-ÿ ]+$/.test(value);
+};
+
+function validFirstName(){
+    const firstName = contact.FirstName;
     let inputFirstname = document.querySelector("#firstName");
     if(regExpFirstLastNameCity(firstName)){
 		inputFirstname.style.border = "2px solid green";        
 		return true;
     } else {
 		inputFirstname.style.border = "2px solid red";        
-        document.querySelector("#firstNameErrorMsg").textContent = "'Prénom invalide, qual est votre prénom? ";
+        document.querySelector("#firstNameErrorMsg").textContent = "'Prénom invalide, quel est votre prénom? ";
         return false; 
     };
 }
+
+function validLastName(){
+    const lastName = contact.LastName;
+    let inputLastname = document.querySelector("#lastName");
+    if(regExpFirstLastNameCity(lastName)){
+		inputLastname.style.border = "2px solid green";        
+		return true;
+    } else {
+		inputLastname.style.border = "2px solid red";        
+        document.querySelector("#lastNameErrorMsg").textContent = "'Nom invalide, quel est votre Nom? ";
+        return false; 
+    };
+}
+
+
+function validCity(){
+    const city = contact.City;
+    let inputCity = document.querySelector("#city");
+    if(regExpFirstLastNameCity(city)){
+		inputCity.style.border = "2px solid green";        
+		return true;
+    } else {
+		inputCity.style.border = "2px solid red";        
+        document.querySelector("#cityErrorMsg").textContent = "'Ville non reconnue, quel est le Nom de votre ville? ";
+        return false; 
+    };
+}
+
+
+function validAddress(){
+    const address = contact.Address;
+    let inputAddress = document.querySelector("#address");
+    if(regExpAddress(address)){
+		inputAddress.style.border = "2px solid green";        
+		return true;
+    } else {
+		inputAddress.style.border = "2px solid red";        
+        document.querySelector("#addressErrorMsg").textContent = "'Il semble qu'une erreur ou un caractère non autorisé s'est glissé dans votre adresse, veuillez corriger et valider à nouveau. ";
+        return false; 
+    };
+}
+
+function validEmail(){
+    const email = contact.Email;
+    let inputEmail = document.querySelector("#email");
+    if(regExpMail(email)){
+		inputEmail.style.border = "2px solid green";        
+		return true;
+    } else {
+		inputEmail.style.border = "2px solid red";        
+        document.querySelector("#emailErrorMsg").textContent = "'Il semble qu'un caractère non autorisé s'est glissé dans votre adresse email ou que celle-ci n'est pas complète, veuillez corriger et valider à nouveau. ";
+        return false; 
+    };
+}
+
+
+btnCommander.addEventListener('click',(event) => {
+    event.preventDefault();
+    let contact = {
+        lastName: document.getElementById("lastName").value,
+        firstName: document.getElementById("firstName").value,
+        email: document.getElementById("email").value,
+        address: document.getElementById("address").value,
+        city: document.getElementById("city").value,
+    };
+
+    let invalide = false;
+
+    const firstNameOK = validFirstName(contact);
+    if (!firstNameOK) {
+        invalide = true;
+    }
+    const lastNameOK = validLastName(contact);
+    if (!lastNameOK) {
+        invalide = true;
+    }
+    const addressOK = validAddress(contact);
+    if (!addressOK) {
+        invalide = true;
+    }
+	const cityOK = validCity(contact);
+    if (!cityOK) {
+        invalide = true;
+    }
+	const emailOK = validEmail(contact);
+    if (!emailOK) {
+        invalide = true;
+    }
+    if (invalide) {
+        return;
+    }
+
+    
+
+});
+
