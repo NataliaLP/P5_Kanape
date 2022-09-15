@@ -114,15 +114,6 @@ function changeQuantity(sofaId, color, newQuantity) {
 
 const btnCommander = document.querySelector("#order");
 
-btnCommander.addEventListener('click',(event) =>{
-    event.preventDefault();
-let contact = {
-LastName = document.getElementById("lastName").value,
-FirstName = document.getElementById("firstName").value,
-Email = document.getElementById("email").value,
-Address = document.getElementById("address").value,
-City = document.getElementById("city").value,
-};
 
 
 console.log(contact);
@@ -139,8 +130,8 @@ const regExpAddress = (value) => {
     return /^[0-9A-Za-zÀ-ÖØ-öø-ÿ ]+$/.test(value);
 };
 
-function validFirstName(){
-    const firstName = contact.FirstName;
+function validFirstName(contact){
+    const firstName = contact.firstName;
     let inputFirstname = document.querySelector("#firstName");
     if(regExpFirstLastNameCity(firstName)){
 		inputFirstname.style.border = "2px solid green";        
@@ -152,8 +143,8 @@ function validFirstName(){
     };
 }
 
-function validLastName(){
-    const lastName = contact.LastName;
+function validLastName(contact){
+    const lastName = contact.lastName;
     let inputLastname = document.querySelector("#lastName");
     if(regExpFirstLastNameCity(lastName)){
 		inputLastname.style.border = "2px solid green";        
@@ -166,8 +157,8 @@ function validLastName(){
 }
 
 
-function validCity(){
-    const city = contact.City;
+function validCity(contact){
+    const city = contact.city;
     let inputCity = document.querySelector("#city");
     if(regExpFirstLastNameCity(city)){
 		inputCity.style.border = "2px solid green";        
@@ -180,8 +171,8 @@ function validCity(){
 }
 
 
-function validAddress(){
-    const address = contact.Address;
+function validAddress(contact){
+    const address = contact.address;
     let inputAddress = document.querySelector("#address");
     if(regExpAddress(address)){
 		inputAddress.style.border = "2px solid green";        
@@ -193,8 +184,8 @@ function validAddress(){
     };
 }
 
-function validEmail(){
-    const email = contact.Email;
+function validEmail(contact){
+    const email = contact.email;
     let inputEmail = document.querySelector("#email");
     if(regExpMail(email)){
 		inputEmail.style.border = "2px solid green";        
@@ -240,9 +231,31 @@ btnCommander.addEventListener('click',(event) => {
         invalide = true;
     }
     if (invalide) {
-        return;
-    }
+      return;
+  }
 
+  const orderObject = {
+      contact,
+      products: [],
+  };
+
+  let cart = JSON.parse(localStorage.getItem("sofa"));
+  for (let sofaCart of cart) {
+      if (!orderObject.products.includes(sofaCart.id)) {
+          orderObject.products.push(sofaCart.id);
+      }
+  }
+
+  const reponse = await fetch(`http://localhost:3000/api/products/order`, {
+      method: "POST",
+      body: JSON.stringify(orderObject),
+      headers: {
+          'Accept': "application/json",
+          "Content-type": "application/json",
+      },
+  });
+  const retour = await reponse.json();
+    
     
 
 });
