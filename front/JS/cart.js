@@ -116,7 +116,6 @@ const btnCommander = document.querySelector("#order");
 
 
 
-console.log(contact);
 
 const regExpFirstLastNameCity = (value) =>{
     return /^[A-Za-zÀ-ÖØ-öø-ÿ ]+$/.test(value);
@@ -197,8 +196,12 @@ function validEmail(contact){
     };
 }
 
+const form = document.querySelector("form");
+form.addEventListener("submit", (event)=>{
+    event.preventDefault();
+});
 
-btnCommander.addEventListener('click',(event) => {
+btnCommander.addEventListener('click', async (event) => {
     event.preventDefault();
     let contact = {
         lastName: document.getElementById("lastName").value,
@@ -253,10 +256,12 @@ btnCommander.addEventListener('click',(event) => {
           'Accept': "application/json",
           "Content-type": "application/json",
       },
-  });
-  const retour = await reponse.json();
-    
-    
-
+  })
+  
+  .then((res) => res.json())
+  .then((data) => {
+      //redirection vers la page de confirmattion
+      window.location.href = "confirmation.html" + "?orderId=" + data.orderId;
+      localStorage.clear();
+  })
 });
-
